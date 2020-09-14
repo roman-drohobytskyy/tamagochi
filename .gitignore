@@ -1,0 +1,54 @@
+HELP.md
+*/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+# target
+target
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+### VS Code ###
+.vscode/
+
+### NodeJS ###
+node_modules/
+
+# GCP service account key
+gcp-credentials.json
+
+# GCP ignore file
+.gcloudignore
+
+#iml
+*.iml
+
+# IntellijIdea files
+*.idea
+
+# DS_Store
+.DS_Store
