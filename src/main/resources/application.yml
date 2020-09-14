@@ -1,8 +1,0 @@
-spring:
-  profiles:
-    active: dev
-  cloud:
-    gcp:
-      project-id: neural-medium-289511
-      pub-sub:
-        dataflow-topic: "hamster"
