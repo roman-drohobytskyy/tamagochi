@@ -1,0 +1,5 @@
+spring:
+  cloud:
+    gcp:
+      credentials:
+        location: file:C:\hamster\neural-medium-289511-140046913ebc.json
