@@ -10,6 +10,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Slf4j
 @Configuration
@@ -26,6 +27,19 @@ public class GcpPubSubConfig {
             @Value("${spring.cloud.gcp.pub-sub.dataflow-topic}") String topicName,
             PubSubTemplate pubsubTemplate
     ) {
-        return new PubSubMessageHandler(pubsubTemplate, topicName);
+        PubSubMessageHandler adapter = new PubSubMessageHandler(pubsubTemplate, topicName);
+        adapter.setPublishCallback(new ListenableFutureCallback<>() {
+            @Override
+            public void onFailure(Throwable ex) {
+                log.info("There was an error sending the message.");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                log.info("Message was sent successfully.");
+            }
+        });
+
+        return adapter;
     }
 }

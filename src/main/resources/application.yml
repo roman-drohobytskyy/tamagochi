@@ -5,9 +5,4 @@ spring:
     gcp:
       project-id: neural-medium-289511
       pub-sub:
-        dataflow-topic: projects/neural-medium-289511/topics/hamster
-logging:
-  level:
-    com:
-      epam:
-        gcp: DEBUG
+        dataflow-topic: "hamster"
