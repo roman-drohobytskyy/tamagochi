@@ -1,1 +1,14 @@
-
+spring:
+  profiles:
+    active: default
+  cloud:
+    gcp:
+      project-id: gcp-trainings-272313
+      pub-sub:
+        csv-processor-subscription-name: projects/gcp-trainings-272313/subscriptions/csv-files-bucket-notifications-topic-csv-processor-subscription
+        dataflow-json-processing-topic-name: projects/gcp-trainings-272313/topics/dataflow-json-processing-topic
+logging:
+  level:
+    com:
+      epam:
+        gcp: DEBUG
