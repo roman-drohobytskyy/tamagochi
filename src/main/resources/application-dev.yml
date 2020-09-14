@@ -1,0 +1,5 @@
+spring:
+  cloud:
+    gcp:
+      credentials:
+        location: file:D:\gcp\credentials\application_default_credentials.json

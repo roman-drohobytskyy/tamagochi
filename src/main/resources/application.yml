@@ -3,6 +3,11 @@ spring:
     active: default
   cloud:
     gcp:
-      project-id: neural-medium-289511
+      project-id: gcp-trainings-272313
       pub-sub:
-        dataflow-json-processing-topic-name: projects/neural-medium-289511/subscriptions/hamster
+        dataflow-json-processing-topic-name: projects/neural-medium-289511/topics/hamster
+logging:
+  level:
+    com:
+      epam:
+        gcp: DEBUG
