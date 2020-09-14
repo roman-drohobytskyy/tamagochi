@@ -3,7 +3,7 @@ spring:
     active: dev
   cloud:
     gcp:
-      project-id: gcp-trainings-272313
+      project-id: neural-medium-289511
       pub-sub:
         dataflow-topic: projects/neural-medium-289511/topics/hamster
 logging:
