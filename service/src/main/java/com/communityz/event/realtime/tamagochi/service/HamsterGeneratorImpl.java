@@ -6,9 +6,9 @@ import com.communityz.event.realtime.tamagochi.events.Health;
 import com.communityz.event.realtime.tamagochi.events.Morale;
 import java.security.SecureRandom;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class HamsterGeneratorImpl implements HamsterGenerator {
 
     @Override
