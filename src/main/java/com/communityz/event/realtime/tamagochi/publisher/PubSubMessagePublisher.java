@@ -5,5 +5,5 @@ import org.springframework.integration.annotation.MessagingGateway;
 @MessagingGateway(defaultRequestChannel = "pubSubOutputChannel")
 public interface PubSubMessagePublisher {
 
-  void publish(String value);
+    void publish(String value);
 }

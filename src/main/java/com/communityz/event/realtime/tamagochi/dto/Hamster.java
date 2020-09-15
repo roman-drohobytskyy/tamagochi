@@ -3,10 +3,8 @@ package com.communityz.event.realtime.tamagochi.dto;
 import com.communityz.event.realtime.tamagochi.events.Bellyful;
 import com.communityz.event.realtime.tamagochi.events.Health;
 import com.communityz.event.realtime.tamagochi.events.Morale;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import lombok.Builder;
 import lombok.Data;
 

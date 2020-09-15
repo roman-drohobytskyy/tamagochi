@@ -23,8 +23,8 @@ public class GcpPubSubConfig {
     @Bean
     @ServiceActivator(inputChannel = "pubSubOutputChannel")
     public MessageHandler messageSender(
-            @Value("${spring.cloud.gcp.pub-sub.dataflow-topic}") String topicName,
-            PubSubTemplate pubsubTemplate
+      @Value("${spring.cloud.gcp.pub-sub.dataflow-topic}") String topicName,
+      PubSubTemplate pubsubTemplate
     ) {
         return new PubSubMessageHandler(pubsubTemplate, topicName);
     }
