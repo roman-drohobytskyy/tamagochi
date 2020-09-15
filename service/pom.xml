@@ -3,14 +3,26 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>tamagochi</artifactId>
+
   <build>
-    <plugins>
-      <plugin>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <groupId>org.springframework.boot</groupId>
-      </plugin>
-    </plugins>
+      <finalName>GCS-Carrier</finalName>
+      <plugins>
+        <plugin>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <groupId>org.springframework.boot</groupId>
+        </plugin>
+        <plugin>
+          <artifactId>appengine-maven-plugin</artifactId>
+          <configuration>
+            <deploy.projectId>neural-medium-289511</deploy.projectId>
+            <deploy.version>v1</deploy.version>
+          </configuration>
+          <groupId>com.google.cloud.tools</groupId>
+          <version>2.2.0</version>
+        </plugin>
+      </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -51,6 +63,7 @@
       <version>2.0.1.Final</version>
     </dependency>
   </dependencies>
+
   <dependencyManagement>
     <dependencies>
       <dependency>

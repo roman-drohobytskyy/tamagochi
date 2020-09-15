@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: default
   cloud:
     gcp:
       project-id: neural-medium-289511
