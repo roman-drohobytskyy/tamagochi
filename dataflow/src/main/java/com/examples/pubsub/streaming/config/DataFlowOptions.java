@@ -1,4 +1,4 @@
-package com.examples.pubsub.streaming;
+package com.examples.pubsub.streaming.config;
 
 import org.apache.beam.sdk.extensions.gcp.options.GcpOptions;
 import org.apache.beam.sdk.options.Default;

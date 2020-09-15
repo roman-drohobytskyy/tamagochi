@@ -39,7 +39,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>com.examples.pubsub.streaming.DataFlowProcessor</mainClass>
+              <mainClass>com.examples.pubsub.streaming.service.DataFlowProcessor</mainClass>
             </manifest>
           </archive>
         </configuration>

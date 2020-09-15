@@ -1,4 +1,4 @@
-package com.examples.pubsub.streaming;
+package com.examples.pubsub.streaming.service;
 
 import com.examples.pubsub.streaming.dto.TamagochiDto;
 import com.google.cloud.firestore.DocumentReference;
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class FirestoreConnector extends DoFn<TamagochiDto, TamagochiDto> {
 
-    private final static Logger LOG = LoggerFactory.getLogger(JsonToTamagochiDto.class);
+    private final static Logger LOG = LoggerFactory.getLogger(JsonToTamagochiProcessor.class);
 
     private final String filePath;
     private final String firestoreCollection;

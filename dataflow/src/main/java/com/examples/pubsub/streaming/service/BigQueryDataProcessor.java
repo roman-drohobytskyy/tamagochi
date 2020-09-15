@@ -1,4 +1,4 @@
-package com.examples.pubsub.streaming;
+package com.examples.pubsub.streaming.service;
 
 import com.examples.pubsub.streaming.dto.TamagochiDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,7 @@ import org.apache.beam.sdk.transforms.DoFn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PrepData {
+public class BigQueryDataProcessor {
 
     public static class ToTableRow extends DoFn<TamagochiDto, TableRow> {
 

@@ -1,5 +1,6 @@
-package com.examples.pubsub.streaming.dto;
+package com.examples.pubsub.streaming.util;
 
+import com.examples.pubsub.streaming.dto.TamagochiDto;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.slf4j.Logger;

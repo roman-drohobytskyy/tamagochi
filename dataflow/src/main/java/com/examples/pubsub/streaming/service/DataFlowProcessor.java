@@ -1,5 +1,7 @@
-package com.examples.pubsub.streaming;
+package com.examples.pubsub.streaming.service;
 
+import com.examples.pubsub.streaming.config.DataFlowOptions;
+import com.examples.pubsub.streaming.service.BigQueryDataProcessor.ToTableRow;
 import com.examples.pubsub.streaming.dto.TamagochiDto;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,8 +19,6 @@ import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class DataFlowProcessor {
@@ -62,7 +62,7 @@ public class DataFlowProcessor {
 
     private static PCollection<TamagochiDto> validatePubSubMessages(PCollection<String> messages) {
         log.info("Validating PubSub messages");
-        return messages.apply("FilterValidMessages", ParDo.of(new JsonToTamagochiDto()));
+        return messages.apply("FilterValidMessages", ParDo.of(new JsonToTamagochiProcessor()));
     }
 
     private static void writeToBigQuery(DataFlowOptions options,
@@ -73,7 +73,7 @@ public class DataFlowProcessor {
         JsonSchema schema = schemaGen.generateSchema(TamagochiDto.class);
         try {
             PCollection<TableRow> tableRow = validMessages
-                .apply("ToTableRow", ParDo.of(new PrepData.ToTableRow()));
+                .apply("ToTableRow", ParDo.of(new ToTableRow()));
             tableRow.apply("WriteToBQ",
                 BigQueryIO.writeTableRows()
                     .to(String.format("%s.%s", options.getBqDataSet(), options.getBqTable()))

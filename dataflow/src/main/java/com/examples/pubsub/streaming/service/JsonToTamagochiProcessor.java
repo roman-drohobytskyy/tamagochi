@@ -1,16 +1,16 @@
-package com.examples.pubsub.streaming;
+package com.examples.pubsub.streaming.service;
 
 import com.examples.pubsub.streaming.dto.TamagochiDto;
-import com.examples.pubsub.streaming.dto.TamagochiDtoValidator;
+import com.examples.pubsub.streaming.util.TamagochiDtoValidator;
 import java.util.UUID;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.vendor.grpc.v1p21p0.com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JsonToTamagochiDto extends DoFn<String, TamagochiDto> {
+public class JsonToTamagochiProcessor extends DoFn<String, TamagochiDto> {
 
-    private final static Logger LOG = LoggerFactory.getLogger(JsonToTamagochiDto.class);
+    private final static Logger LOG = LoggerFactory.getLogger(JsonToTamagochiProcessor.class);
 
     @ProcessElement
     public void processElement(ProcessContext c) {

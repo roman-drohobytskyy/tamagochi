@@ -1,5 +1,7 @@
 package com.examples.pubsub.streaming;
 
+import com.examples.pubsub.streaming.config.DataFlowOptions;
+import com.examples.pubsub.streaming.service.DataFlowProcessor;
 import java.io.IOException;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 
