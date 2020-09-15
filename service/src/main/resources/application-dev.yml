@@ -3,3 +3,4 @@ spring:
     gcp:
       credentials:
         location: file:C:\hamster\pub-sub-key.json
+#        location: file:/Users/roman.drohobytskyy/IdeaProjects/GCP-pub-sub-key.json
