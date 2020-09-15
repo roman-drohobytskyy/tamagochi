@@ -6,3 +6,8 @@ spring:
       project-id: neural-medium-289511
       pub-sub:
         dataflow-topic: "hamster"
+
+scheduling:
+  hamsters:
+    valid: 5000
+    invalid: 20000

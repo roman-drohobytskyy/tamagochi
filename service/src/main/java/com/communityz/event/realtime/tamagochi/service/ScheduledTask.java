@@ -1,16 +1,11 @@
 package com.communityz.event.realtime.tamagochi.service;
 
 import com.communityz.event.realtime.tamagochi.dto.Hamster;
-import com.communityz.event.realtime.tamagochi.events.Bellyful;
-import com.communityz.event.realtime.tamagochi.events.Health;
-import com.communityz.event.realtime.tamagochi.events.Morale;
 import com.communityz.event.realtime.tamagochi.publisher.PubSubMessagePublisher;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.security.SecureRandom;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +15,29 @@ public class ScheduledTask {
 
     private final PubSubMessagePublisher pubSubMessagePublisher;
     private final ObjectMapper objectMapper;
+    private final HamsterGenerator hamsterGenerator;
 
-    public ScheduledTask(PubSubMessagePublisher pubSubMessagePublisher, ObjectMapper objectMapper) {
+    public ScheduledTask(PubSubMessagePublisher pubSubMessagePublisher, ObjectMapper objectMapper,
+        HamsterGenerator hamsterGenerator) {
         this.pubSubMessagePublisher = pubSubMessagePublisher;
         this.objectMapper = objectMapper;
+        this.hamsterGenerator = hamsterGenerator;
     }
 
-    @Scheduled(fixedRate = 5000)
-    public void publishHamsters() {
+    @Scheduled(fixedRateString = "${scheduling.hamsters.valid}")
+    public void publishValidHamsters() {
+        Hamster hamster = hamsterGenerator.generateValidHamster();
+        publish(hamster);
+    }
+
+    @Scheduled(fixedRateString = "${scheduling.hamsters.invalid}", initialDelay = 1000)
+    public void publishInvalidHamsters() {
+        Hamster hamster = hamsterGenerator.generateInvalidHamster();
+        publish(hamster);
+    }
+
+    private void publish(Hamster hamster) {
         Optional<String> json = Optional.empty();
-        SecureRandom random = new SecureRandom();
-        int number = random.nextInt(7);
-        Hamster hamster = number < 0 ? generateValidHamster() : generateInvalidHamster();
         try {
             json = Optional.ofNullable(objectMapper.writeValueAsString(hamster));
         } catch (JsonProcessingException e) {
@@ -44,26 +50,5 @@ public class ScheduledTask {
             },
             () -> pubSubMessagePublisher
                 .publish(String.format("Error publishing the hamster '%s'", hamster.getName())));
-    }
-
-    private static <T extends Enum<?>> T getRandomEnumValue(Class<T> clazz) {
-        SecureRandom random = new SecureRandom();
-        int number = random.nextInt(clazz.getEnumConstants().length);
-        return clazz.getEnumConstants()[number];
-    }
-
-    private Hamster generateValidHamster() {
-        return Hamster.builder()
-            .name(RandomStringUtils.randomAlphabetic(7))
-            .bellyful(getRandomEnumValue(Bellyful.class))
-            .health(getRandomEnumValue(Health.class))
-            .morale(getRandomEnumValue(Morale.class))
-            .build();
-    }
-
-    private Hamster generateInvalidHamster() {
-        return Hamster.builder()
-            .name("invalid")
-            .build();
     }
 }
