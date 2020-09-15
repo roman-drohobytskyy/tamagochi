@@ -9,5 +9,9 @@ spring:
 
 scheduling:
   hamsters:
-    valid: 5000
-    invalid: 20000
+    valid:
+      initialDelay: 0
+      fixedRate: 5000
+    invalid:
+      initialDelay: 1000
+      fixedRate: 20000
