@@ -24,7 +24,7 @@ public class JsonToTamagochiDto extends DoFn<String, TamagochiDto> {
             if (TamagochiDtoValidator.isUserDtoValid(tamagochiDto)) {
                 tamagochiDto.setId(UUID.randomUUID().toString());
                 c.output(tamagochiDto);
-                LOG.info(tamagochiDto.toString());
+                LOG.info("Processing Hamster - '{}'", tamagochiDto.getName());
             } else {
                 LOG.info(tamagochiDto.toString() + " is not valid");
             }

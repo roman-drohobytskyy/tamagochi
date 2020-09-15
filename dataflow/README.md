@@ -27,6 +27,6 @@ Example for program parameters in run/debug Configurations:
 --tempLocation=gs://hamster-dataflow/staging
 --subscription=hamster
 --keyFilePath=C:\hamster\dataflow-key.json
---bqDataSet=dataflow
---bqTable=dataflow
+--bqDataSet=hamsters
+--bqTable=hamsters
 ```

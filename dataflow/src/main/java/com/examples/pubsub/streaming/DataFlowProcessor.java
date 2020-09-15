@@ -11,6 +11,7 @@ import com.google.auth.oauth2.ServiceAccountCredentials;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collections;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
@@ -19,9 +20,8 @@ import org.apache.beam.sdk.values.PCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class DataFlowProcessor {
-
-    private final static Logger LOG = LoggerFactory.getLogger(DataFlowProcessor.class);
 
     static void runLocalValidatorDataFlow(DataFlowOptions options) throws IOException {
         GoogleCredentials credentials =
@@ -37,11 +37,11 @@ public class DataFlowProcessor {
 
         // Validate messages
         PCollection<TamagochiDto> validMessages =
-            messages.apply("FilterValidMessages", ParDo.of(new JsonToTamagochiDto()));
-//
-//        // Write to BigQuery
-//        writeToBigQuery(options, validMessages);
-//
+            validatePubSubMessages(messages);
+
+        // Write to BigQuery
+        writeToBigQuery(options, validMessages);
+
 //        // Write to Firestore
 //        validMessages.apply("Write to Firestore",
 //        ParDo.of(new FirestoreConnector(options.getKeyFilePath(),
@@ -55,9 +55,14 @@ public class DataFlowProcessor {
         Pipeline pipeline) {
         String subscription =
             "projects/" + options.getProject() + "/subscriptions/" + options.getSubscription();
-        LOG.info("Reading from subscription: " + subscription);
+        log.info("Reading from subscription: " + subscription);
         return pipeline.apply("GetPubSub", PubsubIO.readStrings()
             .fromSubscription(subscription));
+    }
+
+    private static PCollection<TamagochiDto> validatePubSubMessages(PCollection<String> messages) {
+        log.info("Validating PubSub messages");
+        return messages.apply("FilterValidMessages", ParDo.of(new JsonToTamagochiDto()));
     }
 
     private static void writeToBigQuery(DataFlowOptions options,
@@ -74,9 +79,9 @@ public class DataFlowProcessor {
                     .to(String.format("%s.%s", options.getBqDataSet(), options.getBqTable()))
                     .withJsonSchema(schema.toString())
                     .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
-            LOG.info("Writing completed");
+            log.info("BigQuery writing stage initialized");
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 }
