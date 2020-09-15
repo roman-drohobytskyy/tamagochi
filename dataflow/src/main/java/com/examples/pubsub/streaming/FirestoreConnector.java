@@ -23,7 +23,7 @@ public class FirestoreConnector extends DoFn<TamagochiDto, TamagochiDto> {
     @ProcessElement
     public void processElement(ProcessContext c) throws Exception {
         Firestore firestore = FirestoreOptions.getDefaultInstance()
-                .getService();
+            .getService();
         try {
             DocumentReference docRef = firestore.collection(firestoreCollection).document();
             docRef.set(c.element());

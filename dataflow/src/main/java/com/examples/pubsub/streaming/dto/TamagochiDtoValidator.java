@@ -1,10 +1,9 @@
 package com.examples.pubsub.streaming.dto;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TamagochiDtoValidator {
 
@@ -13,13 +12,15 @@ public class TamagochiDtoValidator {
     private static final String NAME_PATTERN = "[A-Za-z_]*";
 
     public static boolean isUserDtoValid(TamagochiDto tamagochiDto) {
-        return Stream.of(tamagochiDto.getName(), tamagochiDto.getBellyful(), tamagochiDto.getHealth(),
+        return Stream
+            .of(tamagochiDto.getName(), tamagochiDto.getBellyful(), tamagochiDto.getHealth(),
                 tamagochiDto.getMorale())
-                .allMatch(TamagochiDtoValidator::stringIsValid);
+            .allMatch(TamagochiDtoValidator::stringIsValid);
     }
 
     private static boolean stringIsValid(String name) {
-        if (name == null || name.isEmpty() || !Pattern.compile(NAME_PATTERN).matcher(name).matches()) {
+        if (name == null || name.isEmpty() || !Pattern.compile(NAME_PATTERN).matcher(name)
+            .matches()) {
             LOG.error("{} : is not a valid string", name);
             return false;
         }

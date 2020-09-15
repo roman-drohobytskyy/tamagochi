@@ -1,9 +1,12 @@
 package com.examples.pubsub.streaming;
 
 import org.apache.beam.sdk.extensions.gcp.options.GcpOptions;
-import org.apache.beam.sdk.options.*;
+import org.apache.beam.sdk.options.Default;
+import org.apache.beam.sdk.options.Description;
+import org.apache.beam.sdk.options.StreamingOptions;
 
 public interface DataFlowOptions extends StreamingOptions, GcpOptions {
+
     @Description("The Cloud Pub/Sub subscription to read from.")
     @Default.String("dataflow-job")
     String getSubscription();

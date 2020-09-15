@@ -1,9 +1,8 @@
 package com.examples.pubsub.streaming.dto;
 
-import lombok.Data;
-
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import lombok.Data;
 
 @Data
 public class TamagochiDto implements Serializable {

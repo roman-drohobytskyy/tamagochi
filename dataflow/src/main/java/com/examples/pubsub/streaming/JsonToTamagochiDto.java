@@ -2,12 +2,11 @@ package com.examples.pubsub.streaming;
 
 import com.examples.pubsub.streaming.dto.TamagochiDto;
 import com.examples.pubsub.streaming.dto.TamagochiDtoValidator;
+import java.util.UUID;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.vendor.grpc.v1p21p0.com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.UUID;
 
 public class JsonToTamagochiDto extends DoFn<String, TamagochiDto> {
 

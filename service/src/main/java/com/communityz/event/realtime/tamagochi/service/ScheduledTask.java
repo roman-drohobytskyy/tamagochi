@@ -26,31 +26,32 @@ public class ScheduledTask {
         this.objectMapper = objectMapper;
     }
 
+    public static <T extends Enum<?>> T getRandomEnumValue(Class<T> clazz) {
+        SecureRandom random = new SecureRandom();
+        int number = random.nextInt(clazz.getEnumConstants().length);
+        return clazz.getEnumConstants()[number];
+    }
+
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
         Optional<String> json = Optional.empty();
         Hamster hamster = Hamster.builder()
-          .name(RandomStringUtils.randomAlphabetic(7))
-          .bellyful(getRandomEnumValue(Bellyful.class))
-          .health(getRandomEnumValue(Health.class))
-          .morale(getRandomEnumValue(Morale.class))
-          .build();
+            .name(RandomStringUtils.randomAlphabetic(7))
+            .bellyful(getRandomEnumValue(Bellyful.class))
+            .health(getRandomEnumValue(Health.class))
+            .morale(getRandomEnumValue(Morale.class))
+            .build();
         try {
             json = Optional.ofNullable(objectMapper.writeValueAsString(hamster));
         } catch (JsonProcessingException e) {
             log.error("Hamster can not be transformed into Json" + e.getMessage());
         }
         json.ifPresentOrElse(
-          h -> {
-              pubSubMessagePublisher.publish(h);
-              log.info("Hamster '{}' has been successfully published", hamster.getName());
-          },
-          () -> pubSubMessagePublisher.publish(String.format("Error publishing the hamster '%s'", hamster.getName())));
-    }
-
-    public static <T extends Enum<?>> T getRandomEnumValue(Class<T> clazz) {
-        SecureRandom random = new SecureRandom();
-        int number = random.nextInt(clazz.getEnumConstants().length);
-        return clazz.getEnumConstants()[number];
+            h -> {
+                pubSubMessagePublisher.publish(h);
+                log.info("Hamster '{}' has been successfully published", hamster.getName());
+            },
+            () -> pubSubMessagePublisher
+                .publish(String.format("Error publishing the hamster '%s'", hamster.getName())));
     }
 }
