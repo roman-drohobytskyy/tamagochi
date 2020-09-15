@@ -18,10 +18,10 @@ public class TamagochiDtoValidator {
             .allMatch(TamagochiDtoValidator::stringIsValid);
     }
 
-    private static boolean stringIsValid(String name) {
-        if (name == null || name.isEmpty() || !Pattern.compile(NAME_PATTERN).matcher(name)
+    private static boolean stringIsValid(String value) {
+        if (value == null || value.isEmpty() || !Pattern.compile(NAME_PATTERN).matcher(value)
             .matches()) {
-            LOG.error("{} : is not a valid string", name);
+            LOG.error("Field {} : is not a valid string", value);
             return false;
         }
         return true;

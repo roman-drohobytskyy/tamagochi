@@ -26,21 +26,12 @@ public class ScheduledTask {
         this.objectMapper = objectMapper;
     }
 
-    public static <T extends Enum<?>> T getRandomEnumValue(Class<T> clazz) {
-        SecureRandom random = new SecureRandom();
-        int number = random.nextInt(clazz.getEnumConstants().length);
-        return clazz.getEnumConstants()[number];
-    }
-
     @Scheduled(fixedRate = 5000)
-    public void reportCurrentTime() {
+    public void publishHamsters() {
         Optional<String> json = Optional.empty();
-        Hamster hamster = Hamster.builder()
-            .name(RandomStringUtils.randomAlphabetic(7))
-            .bellyful(getRandomEnumValue(Bellyful.class))
-            .health(getRandomEnumValue(Health.class))
-            .morale(getRandomEnumValue(Morale.class))
-            .build();
+        SecureRandom random = new SecureRandom();
+        int number = random.nextInt(7);
+        Hamster hamster = number < 0 ? generateValidHamster() : generateInvalidHamster();
         try {
             json = Optional.ofNullable(objectMapper.writeValueAsString(hamster));
         } catch (JsonProcessingException e) {
@@ -53,5 +44,26 @@ public class ScheduledTask {
             },
             () -> pubSubMessagePublisher
                 .publish(String.format("Error publishing the hamster '%s'", hamster.getName())));
+    }
+
+    private static <T extends Enum<?>> T getRandomEnumValue(Class<T> clazz) {
+        SecureRandom random = new SecureRandom();
+        int number = random.nextInt(clazz.getEnumConstants().length);
+        return clazz.getEnumConstants()[number];
+    }
+
+    private Hamster generateValidHamster() {
+        return Hamster.builder()
+            .name(RandomStringUtils.randomAlphabetic(7))
+            .bellyful(getRandomEnumValue(Bellyful.class))
+            .health(getRandomEnumValue(Health.class))
+            .morale(getRandomEnumValue(Morale.class))
+            .build();
+    }
+
+    private Hamster generateInvalidHamster() {
+        return Hamster.builder()
+            .name("invalid")
+            .build();
     }
 }

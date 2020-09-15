@@ -3,7 +3,7 @@ package com.examples.pubsub.streaming;
 import java.io.IOException;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 
-public class Main {
+public class Dataflow {
 
     public static void main(String[] args) throws IOException {
 
