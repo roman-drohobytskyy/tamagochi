@@ -20,10 +20,9 @@ public class TamagochiDtoValidator {
 
     private static boolean stringIsValid(String name) {
         if (name == null || name.isEmpty() || !Pattern.compile(NAME_PATTERN).matcher(name).matches()) {
-            LOG.error(name + " : is not valid part of name");
+            LOG.error("{} : is not a valid string", name);
             return false;
         }
         return true;
     }
 }
-
