@@ -5,7 +5,7 @@
   <artifactId>tamagochi</artifactId>
 
   <build>
-      <finalName>GCS-Carrier</finalName>
+      <finalName>Hamsters</finalName>
       <plugins>
         <plugin>
           <artifactId>spring-boot-maven-plugin</artifactId>

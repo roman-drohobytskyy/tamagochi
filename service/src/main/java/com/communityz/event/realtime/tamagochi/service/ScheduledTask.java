@@ -24,22 +24,16 @@ public class ScheduledTask {
         this.hamsterGenerator = hamsterGenerator;
     }
 
-    @Scheduled(
-        fixedRateString = "${scheduling.hamsters.valid.fixedRate}",
-        initialDelayString = "${scheduling.hamsters.valid.initialDelay}"
-    )
-    public void publishValidHamsters() {
+    public Hamster publishValidHamsters() {
         Hamster hamster = hamsterGenerator.generateValidHamster();
         publish(hamster);
+        return hamster;
     }
 
-    @Scheduled(
-        fixedRateString = "${scheduling.hamsters.invalid.fixedRate}",
-        initialDelayString = "${scheduling.hamsters.invalid.initialDelay}"
-    )
-    public void publishInvalidHamsters() {
+    public Hamster publishInvalidHamsters() {
         Hamster hamster = hamsterGenerator.generateInvalidHamster();
         publish(hamster);
+        return hamster;
     }
 
     private void publish(Hamster hamster) {
