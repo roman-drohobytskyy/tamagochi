@@ -1,32 +1,27 @@
 package com.communityz.event.realtime.tamagochi.controller;
 
 import com.communityz.event.realtime.tamagochi.dto.Hamster;
-import com.communityz.event.realtime.tamagochi.service.HamsterGenerator;
 import com.communityz.event.realtime.tamagochi.service.ScheduledTask;
+import com.google.common.collect.Maps;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
 public class TestController {
 
-    private final HamsterGenerator hamsterGenerator;
     private final ScheduledTask scheduledTask;
+    private static final Map.Entry<String, String> STATUS_UP = Maps.immutableEntry("status", "UP");
 
-    public TestController(
-        HamsterGenerator hamsterGenerator,
-        ScheduledTask scheduledTask) {
-        this.hamsterGenerator = hamsterGenerator;
+    public TestController(ScheduledTask scheduledTask) {
         this.scheduledTask = scheduledTask;
     }
 
     @GetMapping
-    public Hamster getHamster() {
-        Hamster hamster = hamsterGenerator.generateValidHamster();
-        log.info("Test hamster - {}", hamster);
-        return hamster;
+    public Map.Entry<String, String> getHamster() {
+        return STATUS_UP;
     }
 
     @GetMapping(value = "/hamsters/valid")
