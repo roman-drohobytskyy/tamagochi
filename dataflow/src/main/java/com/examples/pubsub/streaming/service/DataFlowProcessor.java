@@ -23,7 +23,7 @@ import org.apache.beam.sdk.values.PCollection;
 @Slf4j
 public class DataFlowProcessor {
 
-    static void runLocalValidatorDataFlow(DataFlowOptions options) throws IOException {
+    public static void runLocalValidatorDataFlow(DataFlowOptions options) throws IOException {
         GoogleCredentials credentials =
             ServiceAccountCredentials.fromStream(new FileInputStream(options.getKeyFilePath()))
                 .createScoped(
@@ -56,13 +56,13 @@ public class DataFlowProcessor {
         String subscription =
             "projects/" + options.getProject() + "/subscriptions/" + options.getSubscription();
         log.info("Reading from subscription: " + subscription);
-        return pipeline.apply("GetPubSub", PubsubIO.readStrings()
+        return pipeline.apply("Get Hamsters from PubSub", PubsubIO.readStrings()
             .fromSubscription(subscription));
     }
 
     private static PCollection<TamagochiDto> validatePubSubMessages(PCollection<String> messages) {
         log.info("Validating PubSub messages");
-        return messages.apply("FilterValidMessages", ParDo.of(new JsonToTamagochiProcessor()));
+        return messages.apply("Filter Valid Hamsters", ParDo.of(new JsonToTamagochiProcessor()));
     }
 
     private static void writeToBigQuery(DataFlowOptions options,
@@ -73,8 +73,8 @@ public class DataFlowProcessor {
         JsonSchema schema = schemaGen.generateSchema(TamagochiDto.class);
         try {
             PCollection<TableRow> tableRow = validMessages
-                .apply("ToTableRow", ParDo.of(new ToTableRow()));
-            tableRow.apply("WriteToBQ",
+                .apply("Transform Hamsters to BQ Table rows", ParDo.of(new ToTableRow()));
+            tableRow.apply("Write Hamsters To BQ",
                 BigQueryIO.writeTableRows()
                     .to(String.format("%s.%s", options.getBqDataSet(), options.getBqTable()))
                     .withJsonSchema(schema.toString())
