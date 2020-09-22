@@ -28,7 +28,7 @@ import org.joda.time.Duration;
 @Slf4j
 public class DataFlowProcessor {
 
-    public static void runLocalValidatorDataFlow(DataFlowOptions options) throws IOException {
+    public static void runDataFlowJob(DataFlowOptions options) throws IOException {
         setCredentials(options);
 
         Pipeline pipeline = Pipeline.create(options);
@@ -42,13 +42,11 @@ public class DataFlowProcessor {
         // Write to BigQuery
         writeToBigQuery(options, validMessages);
 
-//        Write to Cloud Storage
-        writeToCloudStorage(options, validMessages);
+        // Write to Cloud Storage
+//        writeToCloudStorage(options, validMessages);
 
-//        // Write to Firestore
-//        validMessages.apply("Write to Firestore",
-//        ParDo.of(new FirestoreConnector(options.getKeyFilePath(),
-//                options.getFirestoreCollection())));
+        // Write to Firestore
+//        writeToFirestore(options, validMessages);
 
         pipeline.run().waitUntilFinish();
 
@@ -103,5 +101,12 @@ public class DataFlowProcessor {
             .apply(Window.into(FixedWindows.of(Duration.standardSeconds(1))));
         log.info("Cloud Storage writing stage initialized");
         tableRow.apply("Write to Cloud Storage", new WriteOneFilePerWindow(options.getOutput(), 1));
+    }
+
+    private static void writeToFirestore(DataFlowOptions options,
+        PCollection<TamagochiDto> validMessages) {
+        validMessages.apply("Write to Firestore",
+            ParDo.of(new FirestoreConnector(options.getKeyFilePath(),
+                options.getFirestoreCollection())));
     }
 }

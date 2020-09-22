@@ -1,8 +1,16 @@
 spring:
   profiles:
-    active: default
+    active: dev
   cloud:
     gcp:
       project-id: neural-medium-289511
       pub-sub:
         dataflow-topic: "hamster"
+scheduling:
+  hamsters:
+    valid:
+      initialDelay: 0
+      fixedRate: 5000
+    invalid:
+      initialDelay: 1000
+      fixedRate: 20000
