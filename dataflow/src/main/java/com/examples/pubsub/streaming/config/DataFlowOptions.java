@@ -4,6 +4,7 @@ import org.apache.beam.sdk.extensions.gcp.options.GcpOptions;
 import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.StreamingOptions;
+import org.apache.beam.sdk.options.Validation.Required;
 
 public interface DataFlowOptions extends StreamingOptions, GcpOptions {
 
@@ -36,4 +37,10 @@ public interface DataFlowOptions extends StreamingOptions, GcpOptions {
     String getFirestoreCollection();
 
     void setFirestoreCollection(String collection);
+
+    @Description("Path of the output file including its filename prefix.")
+    @Required
+    String getOutput();
+    void setOutput(String value);
+
 }
