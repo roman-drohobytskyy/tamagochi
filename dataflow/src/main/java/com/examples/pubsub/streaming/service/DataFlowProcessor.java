@@ -1,34 +1,35 @@
 package com.examples.pubsub.streaming.service;
 
 import com.examples.pubsub.streaming.config.DataFlowOptions;
-import com.examples.pubsub.streaming.service.BigQueryDataProcessor.ToTableRow;
 import com.examples.pubsub.streaming.dto.TamagochiDto;
+import com.examples.pubsub.streaming.service.BigQueryDataProcessor.ToTableRow;
+import com.examples.pubsub.streaming.service.CloudStorageDataProcessor.ToString;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.google.api.services.bigquery.model.TableRow;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.beam.examples.common.WriteOneFilePerWindow;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.transforms.ParDo;
+import org.apache.beam.sdk.transforms.windowing.FixedWindows;
+import org.apache.beam.sdk.transforms.windowing.Window;
 import org.apache.beam.sdk.values.PCollection;
+import org.joda.time.Duration;
 
 @Slf4j
 public class DataFlowProcessor {
 
     static void runLocalValidatorDataFlow(DataFlowOptions options) throws IOException {
-        GoogleCredentials credentials =
-            ServiceAccountCredentials.fromStream(new FileInputStream(options.getKeyFilePath()))
-                .createScoped(
-                    Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
-        options.setGcpCredential(credentials);
+//        GoogleCredentials credentials =
+//            ServiceAccountCredentials.fromStream(new FileInputStream(options.getKeyFilePath()))
+//                .createScoped(
+//                    Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
+//        options.setGcpCredential(credentials);
 
         Pipeline pipeline = Pipeline.create(options);
 
@@ -41,6 +42,9 @@ public class DataFlowProcessor {
 
         // Write to BigQuery
         writeToBigQuery(options, validMessages);
+
+//        Write to Cloud Storage
+        writeToCloudStorage(options, validMessages);
 
 //        // Write to Firestore
 //        validMessages.apply("Write to Firestore",
@@ -83,5 +87,14 @@ public class DataFlowProcessor {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+    }
+
+    private static void writeToCloudStorage(DataFlowOptions options,
+        PCollection<TamagochiDto> validMessages) {
+        PCollection<String> tableRow = validMessages
+            .apply("Transform Hamsters to Storage Table rows", ParDo.of(new ToString()))
+            .apply(Window.into(FixedWindows.of(Duration.standardSeconds(1))));
+        log.info("Cloud Storage writing stage initialized");
+        tableRow.apply("Write to Cloud Storage", new WriteOneFilePerWindow(options.getOutput(), 1));
     }
 }

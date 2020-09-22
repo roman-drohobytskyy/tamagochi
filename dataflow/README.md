@@ -6,6 +6,7 @@ Compile this Dataflow pipeline into a runnable Jar (pubsub-to-bq.jar). Then call
 java.exe -jar "C:\Jars\pubsub-streaming.jar" 
     --runner=DataflowRunner  (optional - specify this in case running on GCP)
     --project='your project Id'
+    --region='region'
     --tempLocation='storage bucket with saging folder for dataflow job'
     --subscription='Topic subscription to read messages from'
     --keyFilePath='GCP service account key location'
@@ -29,4 +30,5 @@ Example for program parameters in run/debug Configurations:
 --keyFilePath=C:\hamster\dataflow-key.json
 --bqDataSet=hamsters
 --bqTable=hamsters
+--output=gs://hamster-dataflow/hamsters
 ```
