@@ -1,7 +1,7 @@
 package com.communityz.event.realtime.tamagochi.controller;
 
 import com.communityz.event.realtime.tamagochi.dto.Hamster;
-import com.communityz.event.realtime.tamagochi.service.ScheduledTask;
+import com.communityz.event.realtime.tamagochi.service.HamsterPublisher;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-public class TestController {
+public class HamsterController {
 
-    private final ScheduledTask scheduledTask;
+    private final HamsterPublisher hamsterPublisher;
     private static final Map.Entry<String, String> STATUS_UP = Maps.immutableEntry("status", "UP");
 
-    public TestController(ScheduledTask scheduledTask) {
-        this.scheduledTask = scheduledTask;
+    public HamsterController(HamsterPublisher hamsterPublisher) {
+        this.hamsterPublisher = hamsterPublisher;
     }
 
     @GetMapping
@@ -27,12 +27,12 @@ public class TestController {
     @GetMapping(value = "/hamsters/valid")
     public Hamster publishValidHamster() {
         log.info("Cron job publishing valid hamsters");
-        return scheduledTask.publishValidHamsters();
+        return hamsterPublisher.publishValidHamsters();
     }
 
     @GetMapping(value = "/hamsters/invalid")
     public Hamster publishInvalidHamster() {
         log.info("Cron job publishing invalid hamsters");
-        return scheduledTask.publishInvalidHamsters();
+        return hamsterPublisher.publishInvalidHamsters();
     }
 }

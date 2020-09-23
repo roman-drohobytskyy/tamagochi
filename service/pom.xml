@@ -14,8 +14,8 @@
         <plugin>
           <artifactId>appengine-maven-plugin</artifactId>
           <configuration>
-            <deploy.projectId>neural-medium-289511</deploy.projectId>
-            <deploy.version>v1</deploy.version>
+            <deploy.projectId>${deploy.projectId}</deploy.projectId>
+            <deploy.version>${deploy.version}</deploy.version>
           </configuration>
           <groupId>com.google.cloud.tools</groupId>
           <version>2.2.0</version>
@@ -91,6 +91,8 @@
   <properties>
     <java.version>11</java.version>
     <spring-cloud-gcp.version>1.1.3.RELEASE</spring-cloud-gcp.version>
+    <deploy.projectId>neural-medium-289511</deploy.projectId>
+    <deploy.version>v2</deploy.version>
   </properties>
 
   <version>0.0.1-SNAPSHOT</version>

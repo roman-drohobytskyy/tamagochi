@@ -1,9 +1,9 @@
 cron:
   - description: "Valid Hamster"
     url: /hamsters/valid
-    schedule: every 24 hours
+    schedule: every 1 minutes
     target: hamster
   - description: "Invalid Hamster"
     url: /hamsters/invalid
-    schedule: every 24 hours
+    schedule: every 5 minutes
     target: hamster

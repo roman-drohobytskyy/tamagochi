@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class ScheduledTask {
+public class HamsterPublisher {
 
     private final PubSubMessagePublisher pubSubMessagePublisher;
     private final ObjectMapper objectMapper;
     private final HamsterGenerator hamsterGenerator;
 
-    public ScheduledTask(PubSubMessagePublisher pubSubMessagePublisher, ObjectMapper objectMapper,
+    public HamsterPublisher(PubSubMessagePublisher pubSubMessagePublisher, ObjectMapper objectMapper,
         HamsterGenerator hamsterGenerator) {
         this.pubSubMessagePublisher = pubSubMessagePublisher;
         this.objectMapper = objectMapper;

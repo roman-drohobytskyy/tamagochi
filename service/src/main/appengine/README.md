@@ -1,6 +1,6 @@
- # to deploy the service:
+# to deploy the service:
  
- mvn clean package appengine:deploy -Dmaven.test.skip=true
+mvn clean package appengine:deploy
  
- # to deploy cron jobs :
- gcloud app deploy cron.yml
+# to deploy cron jobs :
+gcloud app deploy cron.yml
