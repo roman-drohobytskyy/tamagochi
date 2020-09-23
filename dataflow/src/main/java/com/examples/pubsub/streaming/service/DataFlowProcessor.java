@@ -43,10 +43,10 @@ public class DataFlowProcessor {
         writeToBigQuery(options, validMessages);
 
         // Write to Cloud Storage
-//        writeToCloudStorage(options, validMessages);
+        // writeToCloudStorage(options, validMessages);
 
         // Write to Firestore
-//        writeToFirestore(options, validMessages);
+        // writeToFirestore(options, validMessages);
 
         pipeline.run().waitUntilFinish();
 

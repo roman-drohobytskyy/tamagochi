@@ -13,6 +13,6 @@ public class Dataflow {
             .fromArgs(args)
             .withValidation()
             .as(DataFlowOptions.class);
-        DataFlowProcessor.runLocalValidatorDataFlow(options);
+        DataFlowProcessor.runDataFlowJob(options);
     }
 }
