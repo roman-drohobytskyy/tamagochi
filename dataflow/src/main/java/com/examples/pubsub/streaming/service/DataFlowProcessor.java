@@ -9,7 +9,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.google.api.services.bigquery.model.TableRow;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.beam.examples.common.WriteOneFilePerWindow;
 import org.apache.beam.sdk.Pipeline;
@@ -24,12 +28,8 @@ import org.joda.time.Duration;
 @Slf4j
 public class DataFlowProcessor {
 
-    static void runLocalValidatorDataFlow(DataFlowOptions options) throws IOException {
-//        GoogleCredentials credentials =
-//            ServiceAccountCredentials.fromStream(new FileInputStream(options.getKeyFilePath()))
-//                .createScoped(
-//                    Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
-//        options.setGcpCredential(credentials);
+    public static void runDataFlowJob(DataFlowOptions options) throws IOException {
+        setCredentials(options);
 
         Pipeline pipeline = Pipeline.create(options);
 
@@ -37,22 +37,27 @@ public class DataFlowProcessor {
         PCollection<String> messages = readMessagesFromPubSub(options, pipeline);
 
         // Validate messages
-        PCollection<TamagochiDto> validMessages =
-            validatePubSubMessages(messages);
+        PCollection<TamagochiDto> validMessages = validatePubSubMessages(messages);
 
         // Write to BigQuery
         writeToBigQuery(options, validMessages);
 
-//        Write to Cloud Storage
-        writeToCloudStorage(options, validMessages);
+        // Write to Cloud Storage
+//        writeToCloudStorage(options, validMessages);
 
-//        // Write to Firestore
-//        validMessages.apply("Write to Firestore",
-//        ParDo.of(new FirestoreConnector(options.getKeyFilePath(),
-//                options.getFirestoreCollection())));
+        // Write to Firestore
+//        writeToFirestore(options, validMessages);
 
         pipeline.run().waitUntilFinish();
 
+    }
+
+    private static void setCredentials(DataFlowOptions options) throws IOException {
+        GoogleCredentials credentials =
+            ServiceAccountCredentials.fromStream(new FileInputStream(options.getKeyFilePath()))
+                .createScoped(
+                    Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
+        options.setGcpCredential(credentials);
     }
 
     private static PCollection<String> readMessagesFromPubSub(DataFlowOptions options,
@@ -60,13 +65,13 @@ public class DataFlowProcessor {
         String subscription =
             "projects/" + options.getProject() + "/subscriptions/" + options.getSubscription();
         log.info("Reading from subscription: " + subscription);
-        return pipeline.apply("GetPubSub", PubsubIO.readStrings()
+        return pipeline.apply("Read Messages from Pub/Sub", PubsubIO.readStrings()
             .fromSubscription(subscription));
     }
 
     private static PCollection<TamagochiDto> validatePubSubMessages(PCollection<String> messages) {
         log.info("Validating PubSub messages");
-        return messages.apply("FilterValidMessages", ParDo.of(new JsonToTamagochiProcessor()));
+        return messages.apply("Filter Valid Messages", ParDo.of(new JsonToTamagochiProcessor()));
     }
 
     private static void writeToBigQuery(DataFlowOptions options,
@@ -78,7 +83,7 @@ public class DataFlowProcessor {
         try {
             PCollection<TableRow> tableRow = validMessages
                 .apply("ToTableRow", ParDo.of(new ToTableRow()));
-            tableRow.apply("WriteToBQ",
+            tableRow.apply("Write To BigQuery",
                 BigQueryIO.writeTableRows()
                     .to(String.format("%s.%s", options.getBqDataSet(), options.getBqTable()))
                     .withJsonSchema(schema.toString())
@@ -96,5 +101,12 @@ public class DataFlowProcessor {
             .apply(Window.into(FixedWindows.of(Duration.standardSeconds(1))));
         log.info("Cloud Storage writing stage initialized");
         tableRow.apply("Write to Cloud Storage", new WriteOneFilePerWindow(options.getOutput(), 1));
+    }
+
+    private static void writeToFirestore(DataFlowOptions options,
+        PCollection<TamagochiDto> validMessages) {
+        validMessages.apply("Write to Firestore",
+            ParDo.of(new FirestoreConnector(options.getKeyFilePath(),
+                options.getFirestoreCollection())));
     }
 }
