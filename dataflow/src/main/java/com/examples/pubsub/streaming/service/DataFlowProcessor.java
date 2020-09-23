@@ -82,7 +82,7 @@ public class DataFlowProcessor {
         JsonSchema schema = schemaGen.generateSchema(TamagochiDto.class);
         try {
             PCollection<TableRow> tableRow = validMessages
-                .apply("ToTableRow", ParDo.of(new ToTableRow()));
+                .apply("Convert to BigQuery Table Row", ParDo.of(new ToTableRow()));
             tableRow.apply("Write To BigQuery",
                 BigQueryIO.writeTableRows()
                     .to(String.format("%s.%s", options.getBqDataSet(), options.getBqTable()))
