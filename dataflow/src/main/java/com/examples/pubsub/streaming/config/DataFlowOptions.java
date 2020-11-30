@@ -32,12 +32,6 @@ public interface DataFlowOptions extends StreamingOptions, GcpOptions {
 
     void setBqTable(String table);
 
-    @Description("Firestore Collection name")
-    @Default.String("dataflow")
-    String getFirestoreCollection();
-
-    void setFirestoreCollection(String collection);
-
     @Description("Path of the output file including its filename prefix.")
     @Required
     String getOutput();

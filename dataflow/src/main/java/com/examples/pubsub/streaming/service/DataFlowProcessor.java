@@ -43,10 +43,7 @@ public class DataFlowProcessor {
         writeToBigQuery(options, validMessages);
 
         // Write to Cloud Storage
-        // writeToCloudStorage(options, validMessages);
-
-        // Write to Firestore
-        // writeToFirestore(options, validMessages);
+         writeToCloudStorage(options, validMessages);
 
         pipeline.run().waitUntilFinish();
 
@@ -103,10 +100,4 @@ public class DataFlowProcessor {
         tableRow.apply("Write to Cloud Storage", new WriteOneFilePerWindow(options.getOutput(), 1));
     }
 
-    private static void writeToFirestore(DataFlowOptions options,
-        PCollection<TamagochiDto> validMessages) {
-        validMessages.apply("Write to Firestore",
-            ParDo.of(new FirestoreConnector(options.getKeyFilePath(),
-                options.getFirestoreCollection())));
-    }
 }
