@@ -3,7 +3,7 @@ spring:
     active: default
   cloud:
     gcp:
-      project-id: neural-medium-289511
+      project-id: mineral-beaker-328507
       pub-sub:
         dataflow-topic: "hamster"
 scheduling:

@@ -20,8 +20,7 @@ public class TamagochiDtoValidator {
     }
 
     private static boolean stringIsValid(String value) {
-        if (value == null || value.isEmpty() || !Pattern.compile(NAME_PATTERN).matcher(value)
-            .matches()) {
+        if (value == null || value.isEmpty() || !Pattern.compile(NAME_PATTERN).matcher(value).matches()) {
             LOG.error("Field {} : is not a valid string", value);
             return false;
         }

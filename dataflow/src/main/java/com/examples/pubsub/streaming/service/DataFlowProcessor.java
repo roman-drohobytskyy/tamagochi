@@ -4,7 +4,6 @@ import com.examples.pubsub.streaming.config.DataFlowOptions;
 import com.examples.pubsub.streaming.dto.TamagochiDto;
 import com.examples.pubsub.streaming.service.BigQueryDataProcessor.ToTableRow;
 import com.examples.pubsub.streaming.service.CloudStorageDataProcessor.ToString;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
@@ -43,7 +42,7 @@ public class DataFlowProcessor {
         writeToBigQuery(options, validMessages);
 
         // Write to Cloud Storage
-         writeToCloudStorage(options, validMessages);
+        writeToCloudStorage(options, validMessages);
 
         pipeline.run().waitUntilFinish();
 
@@ -58,12 +57,12 @@ public class DataFlowProcessor {
     }
 
     private static PCollection<String> readMessagesFromPubSub(DataFlowOptions options,
-        Pipeline pipeline) {
+                                                              Pipeline pipeline) {
         String subscription =
             "projects/" + options.getProject() + "/subscriptions/" + options.getSubscription();
         log.info("Reading from subscription: " + subscription);
-        return pipeline.apply("Read Messages from Pub/Sub", PubsubIO.readStrings()
-            .fromSubscription(subscription));
+        return pipeline.apply("Read Messages from Pub/Sub",
+            PubsubIO.readStrings().fromSubscription(subscription));
     }
 
     private static PCollection<TamagochiDto> validatePubSubMessages(PCollection<String> messages) {
@@ -72,12 +71,11 @@ public class DataFlowProcessor {
     }
 
     private static void writeToBigQuery(DataFlowOptions options,
-        PCollection<TamagochiDto> validMessages)
-        throws JsonMappingException {
+                                        PCollection<TamagochiDto> validMessages) {
         ObjectMapper mapper = new ObjectMapper();
         JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);
-        JsonSchema schema = schemaGen.generateSchema(TamagochiDto.class);
         try {
+            JsonSchema schema = schemaGen.generateSchema(TamagochiDto.class);
             PCollection<TableRow> tableRow = validMessages
                 .apply("Convert to BigQuery Table Row", ParDo.of(new ToTableRow()));
             tableRow.apply("Write To BigQuery",
@@ -92,7 +90,7 @@ public class DataFlowProcessor {
     }
 
     private static void writeToCloudStorage(DataFlowOptions options,
-        PCollection<TamagochiDto> validMessages) {
+                                            PCollection<TamagochiDto> validMessages) {
         PCollection<String> tableRow = validMessages
             .apply("Transform Hamsters to Storage Table rows", ParDo.of(new ToString()))
             .apply(Window.into(FixedWindows.of(Duration.standardSeconds(1))));

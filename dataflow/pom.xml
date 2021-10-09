@@ -114,6 +114,14 @@
       <version>${beam.version}</version>
     </dependency>
 
+<!--    <dependency>-->
+<!--      <groupId>org.xerial.snappy</groupId>-->
+<!--      <artifactId>snappy-java</artifactId>-->
+<!--      <version>1.1.8.4</version>-->
+<!--      <type>jar</type>-->
+<!--      <scope>compile</scope>-->
+<!--    </dependency>-->
+
     <!--
       By default, the starter project has a dependency on the Beam DirectRunner
       to enable development and testing of pipelines. To run on another of the

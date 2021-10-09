@@ -2,5 +2,5 @@ spring:
   cloud:
     gcp:
       credentials:
-        location: file:C:\hamster\pub-sub-key.json
-#        location: file:/Users/roman.drohobytskyy/IdeaProjects/GCP-pub-sub-key.json
+#        location: file:C:\hamster\pub-sub-key.json
+        location: file:/Users/romandrohobytskyy/Documents/epam/gcp/mineral-beaker-328507-ff2ee771a4d7.json

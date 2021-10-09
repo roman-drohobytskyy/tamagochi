@@ -5,5 +5,5 @@ cron:
     target: hamster
   - description: "Invalid Hamster"
     url: /hamsters/invalid
-    schedule: every 5 minutes
+    schedule: every 2 minutes
     target: hamster

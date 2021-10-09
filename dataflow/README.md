@@ -23,11 +23,23 @@ GOOGLE_APPLICATION_CREDENTIALS=GCP service account key location in .json format
 - Pipeline can support queues with batched messages.
 
 Example for program parameters in run/debug Configurations:
+Windows:
 ```
---project=neural-medium-289511
+--project=mineral-beaker-328507
 --tempLocation=gs://hamster-dataflow/staging
---subscription=hamster
+--subscription=hamster-sub
 --keyFilePath=C:\hamster\dataflow-key.json
+--bqDataSet=hamsters
+--bqTable=hamsters
+--output=gs://hamster-dataflow/hamsters
+```
+
+macOS:
+```
+--project=mineral-beaker-328507
+--tempLocation=gs://hamster-dataflow/staging
+--subscription=hamster-sub
+--keyFilePath=/Users/romandrohobytskyy/Documents/epam/gcp/mineral-beaker-328507-ff2ee771a4d7.json
 --bqDataSet=hamsters
 --bqTable=hamsters
 --output=gs://hamster-dataflow/hamsters
